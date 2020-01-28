@@ -75,17 +75,17 @@ for day in days:
 
 email_joe = BashOperator(
     task_id='email_joe',
-    bash_command='email Joe',
+    bash_command='echo "email Joe"',
     dag=dag,
 )
 email_alice = BashOperator(
     task_id='email_alice',
-    bash_command='email Alice',
+    bash_command='echo "email Alice"',
     dag=dag,
 )
 email_bob = BashOperator(
     task_id='email_bob',
-    bash_command='email Bob',
+    bash_command='echo "email Bob"',
     dag=dag,
 )
 print_weekday >> branching
