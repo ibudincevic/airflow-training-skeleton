@@ -45,6 +45,7 @@ dag = DAG(
 #     print("The day of the week is: ", datetime.datetime.today().weekday())
 
 def _get_weekday(execution_date, **context):
+    print("The day is {}, so we will execute task {}".format(day, days_dict[execution_date.strftime("%a")]))
     return days_dict[execution_date.strftime("%a")]
 
 
@@ -70,7 +71,6 @@ days = ["Mon", "Tue", "Wed"]
 days_dict = {"Mon": 'email_joe', "Tue": 'email_alice', "Wed": 'email_bob'}
 for day in days:
     # branching >> DummyOperator(task_id=day, dag=dag) >> final_task
-    print("The day is {}, so we will execute task {}".format(day, days_dict[day]))
     branching >> DummyOperator(task_id=days_dict[day], dag=dag) >> final_task
 
 email_joe = BashOperator(
