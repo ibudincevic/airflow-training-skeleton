@@ -32,7 +32,7 @@ args = {
 }
 
 dag = DAG(
-    dag_id='my_first_dag',
+    dag_id='my_first_dag_copy',
     default_args=args,
     schedule_interval="45 13 * * 1,3,5",
     dagrun_timeout=timedelta(minutes=60),
