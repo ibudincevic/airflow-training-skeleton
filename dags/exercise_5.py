@@ -88,6 +88,7 @@ email_bob = BashOperator(
     bash_command='email Bob',
     dag=dag,
 )
+print_weekday >> branching
 # wait_5 = BashOperator(
 #     task_id='wait_5',
 #     bash_command='sleep 5',
