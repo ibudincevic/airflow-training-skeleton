@@ -60,22 +60,30 @@ branching = BranchPythonOperator(task_id = "branching",
                                  provide_context = True,
                                  dag = dag)
 
-days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+final_task = DummyOperator(
+    task_id='final_task',
+    dag=dag,
+)
+
+# days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+days = ["Mon", "Tue", "Wed"]
+days_dict = {"Mon": 'email_joe', "Tue": 'email_alice', "Wed": 'email_bob'}
 for day in days:
-    branching >> DummyOperator(task_id=day, dag=dag)
+    # branching >> DummyOperator(task_id=day, dag=dag) >> final_task
+    branching >> DummyOperator(task_id=days_dict[day], dag=dag) >> final_task
 
 email_joe = BashOperator(
-    task_id='Mon',
+    task_id='email_joe',
     bash_command='email Joe',
     dag=dag,
 )
 email_alice = BashOperator(
-    task_id='Tue',
+    task_id='email_alice',
     bash_command='email Alice',
     dag=dag,
 )
 email_bob = BashOperator(
-    task_id='Wed',
+    task_id='email_bob',
     bash_command='email Bob',
     dag=dag,
 )
@@ -90,13 +98,10 @@ email_bob = BashOperator(
 #     dag=dag,
 # )
 #
-final_task = DummyOperator(
-    task_id='final_task',
-    dag=dag,
-)
-email_joe >> final_task
-email_alice >> final_task
-email_bob >> final_task
+#
+# email_joe >> final_task
+# email_alice >> final_task
+# email_bob >> final_task
 # print_weekday >> [wait_1, wait_5, wait_10]
 # wait_1 >> the_end
 # wait_5 >> the_end
