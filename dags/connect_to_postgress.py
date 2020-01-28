@@ -28,7 +28,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.hooks.base_hook import BaseHook
-from airflow.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
+from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 
 
 args = {
