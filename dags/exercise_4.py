@@ -45,7 +45,7 @@ def _print_exec_date(execution_date, **context):
 
 
 print_exec_date = PythonOperator(
-    task_id="python exec date",
+    task_id="python_exec_date",
     python_callable=_print_exec_date,
     provide_context=True,
     dag=dag
