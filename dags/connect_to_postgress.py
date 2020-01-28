@@ -28,6 +28,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.hooks.base_hook import BaseHook
+from airflow.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 
 
 args = {
@@ -45,9 +46,16 @@ dag = DAG(
 
 # def _print_weekday( **context):
 #     print("The day of the week is: ", datetime.datetime.today().weekday())
+def _connect(**context):
+    return BaseHook.get_connection('gdd_connection').host
 
-BaseHook.get_connection('gdd_connection').host
+connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_postgress",
+                                                            python_callable=_connect,
+                                                            provide_context=True,
+                                                            dag=dag
 
+)
+connect_to_postgress
 # def _get_weekday(execution_date, **context):
 #     return execution_date.strftime("%a")
 #

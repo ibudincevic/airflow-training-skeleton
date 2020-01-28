@@ -45,7 +45,7 @@ dag = DAG(
 #     print("The day of the week is: ", datetime.datetime.today().weekday())
 
 def _get_weekday(execution_date, **context):
-    return execution_date.strftime("%a")
+    return days_dict[execution_date.strftime("%a")]
 
 
 print_weekday = PythonOperator(
