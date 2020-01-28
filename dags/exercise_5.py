@@ -26,7 +26,7 @@ import airflow
 from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 
 args = {
     'owner': 'Airflow',
@@ -41,40 +41,66 @@ dag = DAG(
 )
 
 
-def _print_weekday( **context):
-    print("The day of the week is: ", datetime.today().weekday())
+# def _print_weekday( **context):
+#     print("The day of the week is: ", datetime.datetime.today().weekday())
+
+def _get_weekday(execution_date, **context):
+    return execution_date.strftime("%a")
 
 
 print_weekday = PythonOperator(
-    task_id="python_exec_date",
-    python_callable=_print_weekday,
+    task_id="print_weekday",
+    python_callable=_get_weekday,
     provide_context=True,
     dag=dag
 )
-wait_1 = BashOperator(
-    task_id='wait_1',
-    bash_command='sleep 1',
-    dag=dag,
-)
-wait_5 = BashOperator(
-    task_id='wait_5',
-    bash_command='sleep 5',
-    dag=dag,
-)
-wait_10 = BashOperator(
-    task_id='wait_10',
-    bash_command='sleep 10',
-    dag=dag,
-)
 
-the_end = DummyOperator(
-    task_id='the_end',
+branching = BranchPythonOperator(task_id = "branching",
+                                 python_callable = _get_weekday,
+                                 provide_context = True,
+                                 dag = dag)
+
+days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+for day in days:
+    branching >> DummyOperator(task_id=day, dag=dag)
+
+email_joe = BashOperator(
+    task_id='Mon',
+    bash_command='email Joe',
     dag=dag,
 )
-print_weekday >> [wait_1, wait_5, wait_10]
-wait_1 >> the_end
-wait_5 >> the_end
-wait_10 >> the_end
+email_alice = BashOperator(
+    task_id='Tue',
+    bash_command='email Alice',
+    dag=dag,
+)
+email_bob = BashOperator(
+    task_id='Wed',
+    bash_command='email Bob',
+    dag=dag,
+)
+# wait_5 = BashOperator(
+#     task_id='wait_5',
+#     bash_command='sleep 5',
+#     dag=dag,
+# )
+# wait_10 = BashOperator(
+#     task_id='wait_10',
+#     bash_command='sleep 10',
+#     dag=dag,
+# )
+#
+final_task = DummyOperator(
+    task_id='final_task',
+    dag=dag,
+)
+email_joe >> final_task
+email_alice >> final_task
+email_bob >> final_task
+# print_weekday >> [wait_1, wait_5, wait_10]
+# wait_1 >> the_end
+# wait_5 >> the_end
+# wait_10 >> the_end
 # task2 = DummyOperator(
 #     task_id='task2',
 #     dag=dag,
