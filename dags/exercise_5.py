@@ -70,7 +70,7 @@ days = ["Mon", "Tue", "Wed"]
 days_dict = {"Mon": 'email_joe', "Tue": 'email_alice', "Wed": 'email_bob'}
 for day in days:
     # branching >> DummyOperator(task_id=day, dag=dag) >> final_task
-    print("The day is {day}, so we will execute task {task}".format(day, days_dict[day]))
+    print("The day is {}, so we will execute task {}".format(day, days_dict[day]))
     branching >> DummyOperator(task_id=days_dict[day], dag=dag) >> final_task
 
 email_joe = BashOperator(
