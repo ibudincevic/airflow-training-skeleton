@@ -34,7 +34,7 @@ args = {
 dag = DAG(
     dag_id='my_first_dag_copy2',
     default_args=args,
-    schedule_interval=datetime.timedelta(hours=2, minutes=30),
+    schedule_interval=timedelta(hours=2, minutes=30),
     dagrun_timeout=timedelta(minutes=60),
 )
 
