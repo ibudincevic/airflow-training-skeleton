@@ -29,7 +29,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.hooks.base_hook import BaseHook
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
-
+from airflow.hooks.postgres_hook import PostgressHook
 
 args = {
     'owner': 'Airflow',
@@ -49,9 +49,16 @@ dag = DAG(
 def _connect(**context):
     return BaseHook.get_connection('gdd_connection').host
 
+# hook = PostgresHook( postgres_conn_id="land_registry”
+# )
+# hook.get_records(
+sql = "SELECT * FROM land_registry_price_paid_uk LIMIT 10"
+
+
 connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_postgress",
                                                             python_callable=_connect,
                                                             provide_context=True,
+                                                            sql=sql,
                                                             dag=dag
 
 )
