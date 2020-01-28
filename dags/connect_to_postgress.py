@@ -29,7 +29,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.hooks.base_hook import BaseHook
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
-from airflow.hooks.postgres_hook import PostgressHook
+# from airflow.hooks.postgres_hook import PostgressHook
 
 args = {
     'owner': 'Airflow',
