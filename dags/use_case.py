@@ -58,6 +58,7 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         dag=dag)
 run_spark = DataProcPySparkOperator(task_id="run_spark",
                                     main="gs://europe-west1-training-airfl-a98394bc-bucket/build_statistics.py",
+                                    region='europe-west4',
                                     dag=dag)
 delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
                                                         cluster_name="my-dataproc-cluster",
