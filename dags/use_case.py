@@ -53,10 +53,12 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         num_workers=2,
                                                         cluster_name="my-dataproc-cluster",
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
+                                                        region='europe-west4',
                                                         dag=dag)
 delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
                                                         cluster_name="my-dataproc-cluster",
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
+                                                        region='europe-west4',
                                                         dag=dag)
 # fetch_exchange_rates
 # fetch_exchange_rates >> create_dataproc_cluster
