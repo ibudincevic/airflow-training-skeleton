@@ -51,9 +51,7 @@ write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
                                             export_format="json",
                                             bucket='europe-west1-training-airfl-a98394bc-bucket',
                                             filename='data/ivan_postgress_{{execution_date}}.json',
-                                            dag=dag
-
-                                            )
+                                            dag=dag)
 
 
 def _print_stats(ds, **context):
