@@ -50,12 +50,12 @@ fetch_exchange_rates = HttpToGcsOperator(task_id="fetch_exchange_rates",
                                          dag=dag)
 
 create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc_cluster",
-                                                        num_workers=1,
-                                                        cluster_name="my_dataproc_cluster",
+                                                        num_workers=2,
+                                                        cluster_name="my-dataproc-cluster",
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
                                                         dag=dag)
 delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
-                                                        cluster_name="my_dataproc_cluster",
+                                                        cluster_name="my-dataproc-cluster",
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
                                                         dag=dag)
 # fetch_exchange_rates
