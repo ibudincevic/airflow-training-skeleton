@@ -3,7 +3,8 @@ import pathlib
 import posixpath
 import airflow
 import requests
-from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator
+from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator, \
+    DataProcPySparkOperator
 
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -55,6 +56,9 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
                                                         region='europe-west4',
                                                         dag=dag)
+run_spark = DataProcPySparkOperator(task_id="run_spark",
+                                    main="gs://europe-west1-training-airfl-a98394bc-bucket/build_statistics.py",
+                                    dag=dag)
 delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
                                                         cluster_name="my-dataproc-cluster",
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
@@ -62,7 +66,7 @@ delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc
                                                         dag=dag)
 # fetch_exchange_rates
 # fetch_exchange_rates >> create_dataproc_cluster
-fetch_exchange_rates >> create_dataproc_cluster >> delete_dataproc_cluster
+fetch_exchange_rates >> create_dataproc_cluster >> run_spark >> delete_dataproc_cluster
 #
 # write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
 #                                             python_callable=_connect,
