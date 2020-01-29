@@ -3,6 +3,7 @@ import pathlib
 import posixpath
 import airflow
 import requests
+from airflow.contrib.operators.dataproc_operator import DataprocClusterCreateOperator, DataprocClusterDeleteOperator
 
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -22,7 +23,6 @@ dag = DAG(
     description="Running ETL for the use case",
     schedule_interval="0 0 * * *"
 )
-
 
 # def _connect(**context):
 #     return LaunchHook.get_conn()
@@ -49,6 +49,18 @@ fetch_exchange_rates = HttpToGcsOperator(task_id="fetch_exchange_rates",
                                          endpoint="history?start_at=2018-01-01&end_at=2018-01-04&symbols=EUR&base=GBP",
                                          dag=dag)
 
+create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc_cluster",
+                                                        num_workers=1,
+                                                        cluster_name="my_dataproc_cluster",
+                                                        project_id="airflowbolcom-jan2829-b51a8ad2",
+                                                        dag=dag)
+delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
+                                                        cluster_name="my_dataproc_cluster",
+                                                        project_id="airflowbolcom-jan2829-b51a8ad2",
+                                                        dag=dag)
+# fetch_exchange_rates
+# fetch_exchange_rates >> create_dataproc_cluster
+fetch_exchange_rates >> create_dataproc_cluster >> delete_dataproc_cluster
 #
 # write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
 #                                             python_callable=_connect,
