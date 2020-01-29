@@ -58,7 +58,7 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         dag=dag)
 
 arguments = [
-    'gs://europe-west1-training-airfl-a98394bc-bucket/data/ivan_postgress_*.json', #input_properties
+    'gs://europe-west1-training-airfl-a98394bc-bucket/data/properties/properties_*.json', #input_properties
     'gs://europe-west1-training-airfl-a98394bc-bucket/data/use_case_ivan/exchange_rates.json', #input_currencies
     'gs://europe-west1-training-airfl-a98394bc-bucket/use_case_output', #target_path
     'EUR', #target_currency
