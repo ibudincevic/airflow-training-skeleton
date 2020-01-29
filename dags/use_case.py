@@ -56,10 +56,20 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
                                                         region='europe-west4',
                                                         dag=dag)
+
+arguments = [
+    'gs://europe-west1-training-airfl-a98394bc-bucket/data/ivan_postgress_*', #input_properties
+    'gs://europe-west1-training-airfl-a98394bc-bucket/data/use_case_ivan/exchange_rates.json', #input_currencies
+    'gs://europe-west1-training-airfl-a98394bc-bucket/use_case_output', #target_path
+    'EUR', #target_currency
+    '{{ ds }}',#target_date
+]
+
 run_spark = DataProcPySparkOperator(task_id="run_spark",
                                     main="gs://europe-west1-training-airfl-a98394bc-bucket/build_statistics.py",
                                     cluster_name="my-dataproc-cluster",
                                     region='europe-west4',
+                                    arguments=arguments,
                                     dag=dag)
 delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
                                                         cluster_name="my-dataproc-cluster",
