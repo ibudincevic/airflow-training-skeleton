@@ -62,7 +62,7 @@ arguments = [
     'gs://europe-west1-training-airfl-a98394bc-bucket/data/use_case_ivan/exchange_rates.json', #input_currencies
     'gs://europe-west1-training-airfl-a98394bc-bucket/use_case_output', #target_path
     'EUR', #target_currency
-    '{{ ds }}',#target_date
+    '2018-01-03', #target_date
 ]
 
 run_spark = DataProcPySparkOperator(task_id="run_spark",
