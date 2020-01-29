@@ -45,7 +45,7 @@ dag = DAG(
 fetch_exchange_rates = HttpToGcsOperator(task_id="fetch_exchange_rates",
                                          http_conn_id="exchange_rates",
                                          gcs_bucket="europe-west1-training-airfl-a98394bc-bucket",
-                                         gcs_path="data/ivan_postgress_{{execution_date}}.json",
+                                         gcs_path="data/use_case_ivan/exchange_rates.json",
                                          endpoint="history?start_at=2018-01-01&end_at=2018-01-04&symbols=EUR&base=GBP"
                                          )
 fetch_exchange_rates
