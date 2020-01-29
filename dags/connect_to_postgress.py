@@ -63,7 +63,7 @@ connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_
                                                             postgres_conn_id="gdd_connection",
                                                             export_format="json",
                                                             bucket='europe-west1-training-airfl-a98394bc-bucket',
-                                                            filename='data/ivan_postgress_{{execution_date}}.json',
+                                                            filename='data/properties/properties_{{ds}}.json',
                                                             dag=dag
 
 )
