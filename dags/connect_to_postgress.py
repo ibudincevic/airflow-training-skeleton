@@ -53,7 +53,7 @@ def _connect(**context):
 # )
 # hook.get_records(
 sql = "SELECT * FROM land_registry_price_paid_uk " \
-      "WHERE DATE(transfer_date) == DATE('{{execution_date}}')"
+      "WHERE DATE(transfer_date) = DATE('{{execution_date}}')"
 
 
 connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_postgress",
