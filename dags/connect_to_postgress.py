@@ -52,7 +52,8 @@ def _connect(**context):
 # hook = PostgresHook( postgres_conn_id="land_registry”
 # )
 # hook.get_records(
-sql = "SELECT * FROM land_registry_price_paid_uk LIMIT 10"
+sql = "SELECT * FROM land_registry_price_paid_uk " \
+      "WHERE DATE(transfer_date) == DATE({{execution_date}})"
 
 
 connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_postgress",
@@ -62,7 +63,7 @@ connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_
                                                             postgres_conn_id="gdd_connection",
                                                             export_format="json",
                                                             bucket='europe-west1-training-airfl-a98394bc-bucket',
-                                                            filename='data/ivan_postgress.json',
+                                                            filename='data/ivan_postgress_{{execution_date}}.json',
                                                             dag=dag
 
 )
