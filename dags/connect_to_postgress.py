@@ -60,9 +60,9 @@ connect_to_postgress = PostgresToGoogleCloudStorageOperator(task_id="connect_to_
                                                             provide_context=True,
                                                             sql=sql,
                                                             postgres_conn_id="gdd_connection",
-                                                            export_format="csv",
+                                                            export_format="json",
                                                             bucket='europe-west1-training-airfl-a98394bc-bucket',
-                                                            filename='data/ivan_postgress.csv',
+                                                            filename='data/ivan_postgress.json',
                                                             dag=dag
 
 )
