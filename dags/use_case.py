@@ -50,12 +50,12 @@ fetch_exchange_rates = HttpToGcsOperator(task_id="fetch_exchange_rates",
                                          endpoint="history?start_at=2018-01-01&end_at=2018-01-04&symbols=EUR&base=GBP",
                                          dag=dag)
 
-create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc_cluster",
-                                                        num_workers=2,
-                                                        cluster_name="my-dataproc-cluster",
-                                                        project_id="airflowbolcom-jan2829-b51a8ad2",
-                                                        region='europe-west4',
-                                                        dag=dag)
+# create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc_cluster",
+#                                                         num_workers=2,
+#                                                         cluster_name="my-dataproc-cluster",
+#                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
+#                                                         region='europe-west4',
+#                                                         dag=dag)
 
 arguments = [
     'gs://europe-west1-training-airfl-a98394bc-bucket/data/ivan_postgress_*.json', #input_properties
@@ -71,15 +71,15 @@ run_spark = DataProcPySparkOperator(task_id="run_spark",
                                     region='europe-west4',
                                     arguments=arguments,
                                     dag=dag)
-delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
-                                                        cluster_name="my-dataproc-cluster",
-                                                        project_id="airflowbolcom-jan2829-b51a8ad2",
-                                                        region='europe-west4',
-                                                        dag=dag)
+# delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc_cluster",
+#                                                         cluster_name="my-dataproc-cluster",
+#                                                         project_id="airflowbolcom-jan2829-b51a8ad2",
+#                                                         region='europe-west4',
+#                                                         dag=dag)
 # fetch_exchange_rates
 # fetch_exchange_rates >> create_dataproc_cluster
 # fetch_exchange_rates >> create_dataproc_cluster >> run_spark >> delete_dataproc_cluster
-run_spark
+fetch_exchange_rates >> run_spark
 # write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
 #                                             python_callable=_connect,
 #                                             provide_context=True,
