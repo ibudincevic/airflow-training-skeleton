@@ -33,7 +33,7 @@ from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleC
 
 args = {
     'owner': 'Airflow',
-    'start_date': airflow.utils.dates.days_ago(2),
+    'start_date': airflow.utils.dates.days_ago(120),
 }
 
 dag = DAG(
