@@ -8,6 +8,7 @@ from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 
 from hooks.LaunchHook import LaunchHook
+from operators.LaunchToGcsOperator import LaunchToGcsOperator
 
 args = {
     "owner": "godatadriven",
@@ -21,8 +22,10 @@ dag = DAG(
     schedule_interval="0 0 * * *"
 )
 
+
 def _connect(**context):
     return LaunchHook.get_conn()
+
 
 def _download_rocket_launches(ds, tomorrow_ds, **context):
     query = f"https://launchlibrary.net/1.4/launch?startdate={ds}&enddate={tomorrow_ds}"
@@ -35,6 +38,24 @@ def _download_rocket_launches(ds, tomorrow_ds, **context):
         print(f"Writing to file {f.name}")
         f.write(response.text)
 
+
+query = "?startdate={ds}&enddate={tomorrow_ds}"
+
+write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
+                                            python_callable=_connect,
+                                            provide_context=True,
+                                            query=query,
+                                            ds="{{ds}}",
+                                            ds_tomorrow="{{ds_tomorrow}}",
+                                            postgres_conn_id="gdd_connection",
+                                            export_format="json",
+                                            bucket='europe-west1-training-airfl-a98394bc-bucket',
+                                            filename='data/ivan_postgress_{{execution_date}}.json',
+                                            dag=dag
+
+                                            )
+
+
 def _print_stats(ds, **context):
     with open(f"/tmp/rocket_launches/ds={ds}/launches.json") as f:
         data = json.load(f)
@@ -46,6 +67,7 @@ def _print_stats(ds, **context):
             print(f"{len(rockets_launched)} rocket launch(es) on {ds}{rockets_str}.")
         else:
             print(f"No rockets found in {f.name}")
+
 
 download_rocket_launches = PythonOperator(
     task_id="download_rocket_launches",
