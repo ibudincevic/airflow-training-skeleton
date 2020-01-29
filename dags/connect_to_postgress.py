@@ -39,7 +39,7 @@ args = {
 dag = DAG(
     dag_id='connect_to_postgress',
     default_args=args,
-    schedule_interval="45 13 * * 1,3,5",
+    schedule_interval="@daily",
     dagrun_timeout=timedelta(minutes=60),
 )
 
