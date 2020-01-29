@@ -58,7 +58,7 @@ create_dataproc_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         dag=dag)
 
 arguments = [
-    'gs://europe-west1-training-airfl-a98394bc-bucket/data/ivan_postgress_*', #input_properties
+    'gs://europe-west1-training-airfl-a98394bc-bucket/data/ivan_postgress_*.json', #input_properties
     'gs://europe-west1-training-airfl-a98394bc-bucket/data/use_case_ivan/exchange_rates.json', #input_currencies
     'gs://europe-west1-training-airfl-a98394bc-bucket/use_case_output', #target_path
     'EUR', #target_currency
@@ -78,8 +78,8 @@ delete_dataproc_cluster = DataprocClusterDeleteOperator(task_id="delete_dataproc
                                                         dag=dag)
 # fetch_exchange_rates
 # fetch_exchange_rates >> create_dataproc_cluster
-fetch_exchange_rates >> create_dataproc_cluster >> run_spark >> delete_dataproc_cluster
-#
+# fetch_exchange_rates >> create_dataproc_cluster >> run_spark >> delete_dataproc_cluster
+run_spark
 # write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
 #                                             python_callable=_connect,
 #                                             provide_context=True,
