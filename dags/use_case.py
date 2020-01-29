@@ -46,9 +46,9 @@ fetch_exchange_rates = HttpToGcsOperator(task_id="fetch_exchange_rates",
                                          http_conn_id="exchange_rates",
                                          gcs_bucket="europe-west1-training-airfl-a98394bc-bucket",
                                          gcs_path="data/use_case_ivan/exchange_rates.json",
-                                         endpoint="history?start_at=2018-01-01&end_at=2018-01-04&symbols=EUR&base=GBP"
-                                         )
-fetch_exchange_rates
+                                         endpoint="history?start_at=2018-01-01&end_at=2018-01-04&symbols=EUR&base=GBP",
+                                         dag=dag)
+
 #
 # write_response_to_gcs = LaunchToGcsOperator(task_id="write_response_to_gcs",
 #                                             python_callable=_connect,
