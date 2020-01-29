@@ -7,7 +7,7 @@ import requests
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 
-from dags.operators.LaunchHook import LaunchHook
+from hooks.LaunchHook import LaunchHook
 
 args = {
     "owner": "godatadriven",
